@@ -1,10 +1,14 @@
-console.log(gsap);
-
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
+
+const scoreEl = document.querySelector('#scoreEl');
+const highScoreEl = document.querySelector('#highScoreEl');
+const startGameBtn = document.querySelector('#startGameBtn');
+const modalEl = document.querySelector('#modalEl');
+const resultScore = document.querySelector('#resultScore');
 
 class Player {
     constructor(x, y, radius, color) {
@@ -104,10 +108,37 @@ class Particle {
 
 const x = canvas.width / 2;
 const y = canvas.height / 2;
-const player = new Player(x, y, 10, 'white');
-const projectiles = [];
-const enemies = [];
-const particles = [];
+
+let player = new Player(x, y, 10, 'white');
+let projectiles = [];
+let enemies = [];
+let particles = [];
+let highScore = localStorage.getItem('highScore');
+
+function init() {
+    player = new Player(x, y, 10, 'white');
+    projectiles = [];
+    enemies = [];
+    particles = [];
+
+    highScoreEl.innerHTML = localStorage.getItem("highScore");
+
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('highScore', highScore);
+        highScoreEl.innerHTML = localStorage.getItem("highScore");
+    }
+    score = 0;
+    scoreEl.innerHTML = score;
+    resultScore.innerHTML = score;
+}
+
+// let increaseVel = 0;
+// const velocityFunc = setInterval(increaseVelocity(), 300000);
+// function increaseVelocity() {
+//     increaseVel += 0.001;
+//     return increaseVel;
+// }
 
 function spawnEnemies() {
     setInterval(() => {
@@ -132,15 +163,15 @@ function spawnEnemies() {
         )
 
         const velocity = {
-            x: Math.cos(angle),
-            y: Math.sin(angle)
+            x: Math.cos(angle) * 3,
+            y: Math.sin(angle) * 3
         }
         enemies.push(new Enemy(x, y, radius, color, velocity));
     }, 1000);
 }
 
 let animationId;
-
+let score = 0;
 function animate() {
     animationId = requestAnimationFrame(animate);
     context.fillStyle = 'rgba(0, 0, 0, 0.1)';
@@ -177,6 +208,8 @@ function animate() {
         //end game
         if (dist - enemy.radius - player.radius < 1) {
             cancelAnimationFrame(animationId);
+            modalEl.style.display = 'flex';
+            resultScore.innerHTML = score;
         }
 
         projectiles.forEach((projectile, projectileIndex) => {
@@ -199,6 +232,11 @@ function animate() {
                 }
 
                 if (enemy.radius - 10 > 5) {
+
+                    //score
+                    score += 100;
+                    scoreEl.innerHTML = score;
+
                     gsap.to(enemy, {
                         radius: enemy.radius - 10
                     })
@@ -207,6 +245,10 @@ function animate() {
                     }, 0);
                 }
                 else {
+                    //remove from scene all
+                    score += 150;
+                    scoreEl.innerHTML = score;
+
                     setTimeout(() => {
                         enemies.splice(index, 1);
                         projectiles.splice(projectileIndex, 1);
@@ -237,8 +279,9 @@ addEventListener('click', (event) => {
     )
 })
 
-animate();
-spawnEnemies();
-
-//https://www.youtube.com/watch?v=eI9idPTT0c4&list=WL&index=44
-//38:00
+startGameBtn.addEventListener('click', () => {
+    init();
+    animate();
+    spawnEnemies();
+    modalEl.style.display = 'none';
+})
