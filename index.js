@@ -163,8 +163,8 @@ function spawnEnemies() {
         )
 
         const velocity = {
-            x: Math.cos(angle) * 3,
-            y: Math.sin(angle) * 3
+            x: Math.cos(angle) * 1.5,
+            y: Math.sin(angle) * 1.5
         }
         enemies.push(new Enemy(x, y, radius, color, velocity));
     }, 1000);
