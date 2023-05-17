@@ -11,7 +11,7 @@ https://chanilkang.github.io/top_down_shooter_22/
 **Javascript(ES6) 숙련도 향상을 위해 진행한 프로젝트입니다.** 
 - 화면 중앙으로 몰려드는 다양한 색의 동그라미들을 투사체를 발사해 막아내는 게임입니다.
 - 게임의 시작과 끝에 애니메이션을 중지하고 모달창을 열어 점수 결과를 표시합니다.
-- Loacal Storage에 현재 점수와 최고 점수를 입력하고 DOM에 접근하여 화면 왼쪽 상단에 표시합니다.
+- Local Storage에 현재 점수와 최고 점수를 입력하고 DOM에 접근하여 화면 왼쪽 상단에 표시합니다.
 
 
 # Meaning
